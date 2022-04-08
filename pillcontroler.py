@@ -26,15 +26,15 @@ class PillBox:
         self.zero()
 
     def zero(self):
-        self.controller.setTarget(self.servo_no, 1000 * 4)
+        self.controller.setTarget(self.servo_no, 3000 * 4)
 
     def drop_pill(self):
         if self.capacity <= 0:
             raise "ERROR! BRAK NARKOTYKOW"
 
-        self.controller.setTarget(self.servo_no, 3000 * 4)
-        sleep(self.wait_time)
         self.controller.setTarget(self.servo_no, 1000 * 4)
+        sleep(self.wait_time)
+        self.controller.setTarget(self.servo_no, 3000 * 4)
         sleep(self.wait_time)
 
         self.capacity -= 1
@@ -60,6 +60,7 @@ class PillController:
         self.csv_read_write = CSVReadWrite()
 
         self.rotation = {}
+        self.set_pill_rotation()
 
         for i in range(self.pills_containers_num):
             self.pill_boxes.append(PillBox(self.servo_controller, i))
@@ -77,10 +78,12 @@ class PillController:
 
     def set_pill_rotation(self):
         self.rotation = self.csv_read_write.read_set_of_pills()
+        print(type(self.rotation))
 
 
 if __name__ == '__main__':
     pill_controler = PillController("COM4")
+
 
     while True:
         for day in days:
@@ -101,9 +104,10 @@ if __name__ == '__main__':
                         minute_string = f"{current_time.m}"
 
                     current_time_string = f"{current_time.d} " + hour_string + minute_string
-                    
-                    if current_time_string in pill_controler.rotation.keys():
-                        print(pill_controler.rotation[current_time_string])
+
+                    print(pill_controler.rotation)
+                    # if current_time_string in pill_controler.rotation.keys():
+                    #     print(pill_controler.rotation[current_time_string])
 
 
 

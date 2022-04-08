@@ -3,15 +3,17 @@ from time import sleep
 from CSV_Read_Write import CSVReadWrite
 from dataclasses import dataclass
 
+
 @dataclass
 class Time:
     d: str = "Mon"
     h: int = 0
     m: int = 0
 
+
 current_time = Time()
 days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-time_speed = 0.001 #ile czasu w sekundach trwa minuta 
+time_speed = 0.001  # ile czasu w sekundach trwa minuta
 
 
 class PillBox:
@@ -78,12 +80,10 @@ class PillController:
 
     def set_pill_rotation(self):
         self.rotation = self.csv_read_write.read_set_of_pills()
-        print(type(self.rotation))
 
 
 if __name__ == '__main__':
-    pill_controler = PillController("COM4")
-
+    pill_controler = PillController("COM5")
 
     while True:
         for day in days:
@@ -105,11 +105,8 @@ if __name__ == '__main__':
 
                     current_time_string = f"{current_time.d} " + hour_string + minute_string
 
-                    print(pill_controler.rotation)
-                    # if current_time_string in pill_controler.rotation.keys():
-                    #     print(pill_controler.rotation[current_time_string])
-
-
+                    if current_time_string in pill_controler.rotation.keys():
+                        print(pill_controler.rotation[current_time_string])
+                        pill_controler.drop_pills(pill_controler.rotation[current_time_string])
 
                     sleep(time_speed)
-

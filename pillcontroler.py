@@ -3,19 +3,26 @@ from time import sleep
 
 
 class PillBox:
-    def __init__(self, controller, servo_no):
+    def __init__(self, controller, servo_no, wait_time = 1):
         self.controller = controller
         self.servo_no = servo_no
+
+        self.wait_time = wait_time
 
         self.zero()
 
     def zero(self):
         self.controller.setTarget(self.servo_no, 1000 * 4)
 
-    def take_pill(self):
+    def drop_pill(self):
         self.controller.setTarget(self.servo_no, 3000 * 4)
-        sleep(1)
+        sleep(self.wait_time)
         self.controller.setTarget(self.servo_no, 1000 * 4)
+        sleep(self.wait_time)
+
+    def drop_more_pills(self, amount_of_pills):
+        for i in range(amount_of_pills):
+            self.drop_pill()
 
 
 class PillController:
@@ -27,5 +34,9 @@ class PillController:
 
         for i in range(self.pills_containers_num):
             self.pill_boxes.append(PillBox(self.servo_controller, i))
+
+    def drop_pills(self, drop_list_or_dict):
+        for i in range(self.pills_containers_num):
+            self.pill_boxes[i].drop_more_pills(drop_list_or_dict[i])
 
 

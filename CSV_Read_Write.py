@@ -24,4 +24,14 @@ class CSVReadWrite:
     def read_set_of_pills(self):
         pills = pd.read_csv("pills_sets.csv", header=None)
         pills = pills.values.tolist()
-        return pills
+        pills_dict = {}
+        for i in range(len(pills)):
+            pills_dict[pills[i][0]] = pills[i][1:]
+
+        return pills_dict
+
+
+
+
+
+

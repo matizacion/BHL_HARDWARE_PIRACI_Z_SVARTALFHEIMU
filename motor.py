@@ -14,6 +14,8 @@ class Motor:
         self.time_1_=time_1
         self.time_2_=time_2
         self.pwm_=pwm
+        
+        self.setup()
 
     def setup(self):
     
@@ -72,5 +74,4 @@ if  __name__ == '__main__':
     BIN_2=37
     LED=11
     motor=Motor(motor_pin_1,motor_pin_2,AIN_1,AIN_2,BIN_1,BIN_2,LED)
-    motor.setup()
     motor.go()

@@ -4,6 +4,8 @@ from time import sleep
 from pillcontroler import PillController
 from motor import Motor
 
+from send_data import comunication_module
+
 
 @dataclass
 class Time:
@@ -23,6 +25,11 @@ class MainRobot:
         BIN_1 = 35
         BIN_2 = 37
         LED = 11
+
+        self.c = comunication_module()
+        self.c.start_deamon()
+
+        self.old_recv_data = None
 
         self.motor = Motor(motor_pin_1, motor_pin_2, AIN_1, AIN_2, BIN_1, BIN_2, LED)
 
@@ -53,6 +60,11 @@ class MainRobot:
                         current_time_string = f"{self.current_time.d} " + hour_string + minute_string
                         #print(current_time_string)
                         #print(self.pc.rotation.keys())
+
+                        new_recv_data = self.c.recv_data
+                        if self.old_recv_data != new_recv_data:
+                            self.pc.csv_read_write.which_write(new_recv_data)
+                            self.old_recv_data = new_recv_data
 
                         if current_time_string in self.pc.rotation.keys():
                             print("TEST")

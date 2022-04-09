@@ -1,14 +1,6 @@
-import pandas as pd
-import csv
-
-data = b'H,2,10,1,3,10'
-data2 = b'S,2,1,1,7,5'
-data3 = b'H,1,18,30,2,1'
-
-days = {1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat", 7: "Sun"}
-
-
 class CSVReadWrite:
+    days = {1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat", 7: "Sun"}
+
     def __init__(self):
         self.sets_file = open("pills_sets.csv", "r")
         self.sets = [(line.rstrip().split(',')) for line in self.sets_file]
@@ -33,13 +25,12 @@ class CSVReadWrite:
         self.pills_file.write(",".join(self.pills))
         self.pills_file.close()
         self.sets_file.close()
-        print("destruktor")
 
     def write(self, split_str):
         self.pills = split_str
 
     def write_set_of_pills(self, split_str):
-        date = days[int(split_str[0])] + " " + split_str[1] + split_str[2]
+        date = self.days[int(split_str[0])] + " " + split_str[1] + split_str[2]
         if date in self.sets.keys():
             (self.sets[date])[int(split_str[3])] = split_str[4]
         else:
@@ -56,16 +47,3 @@ class CSVReadWrite:
             self.write_set_of_pills(split_str[1:])
         else:
             pass
-
-    # def read_set_of_pills(self):
-    #     pills = pd.read_csv("pills_sets.csv", header=None)
-    #     pills = pills.values.tolist()
-    #     pills_dict = {}
-    #     for i in range(len(pills)):
-    #         pills_dict[pills[i][0]] = pills[i][1:]
-    #
-    #     return pills_dict
-
-
-w = CSVReadWrite()
-w.which_write(data2)

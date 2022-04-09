@@ -4,22 +4,11 @@ from CSV_Read_Write import CSVReadWrite
 from dataclasses import dataclass
 
 
-@dataclass
-class Time:
-    d: str = "Mon"
-    h: int = 0
-    m: int = 0
-
-
-current_time = Time()
-days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-time_speed = 0.001  # ile czasu w sekundach trwa minuta
-
-
 class PillBox:
     """
     Class representing one pill box with one pill server.
     """
+
     def __init__(self, controller, servo_no, start_capacity=0, wait_time=1, zero_pos=3000, delivery_position=1000):
         """
         Initialise one Pill Box
@@ -82,6 +71,7 @@ class PillController:
     """
     Class that represent whole system of containers.
     """
+
     def __init__(self, tty_str):
         """
         Initalise pill controller
@@ -94,12 +84,12 @@ class PillController:
         self.csv_read_write = CSVReadWrite()
 
         self.rotation = {}
-        self.set_pill_rotation()
+        # self.set_pill_rotation()
 
         for i in range(self.pills_containers_num):
             self.pill_boxes.append(PillBox(self.servo_controller, i))
 
-        self.set_capacities()
+        # self.set_capacities()
 
     def drop_pills(self, drop_list_or_dict):
         """
@@ -109,41 +99,44 @@ class PillController:
         """
         for i in range(self.pills_containers_num):
             self.pill_boxes[i].drop_more_pills(drop_list_or_dict[i])
+            self.csv_read_write.pills[i] -= drop_list_or_dict[i]
 
     def set_capacities(self):
-        capacity_list = [156, 145, 142, 23, 15, 6, 17]  # CSVReadWrite.read_set_of_pills()
+        capacity_list = self.csv_read_write.pills
         for i in range(self.pills_containers_num):
             self.pill_boxes[i].capacity = capacity_list[i]
-
-    def set_pill_rotation(self):
-        self.rotation = self.csv_read_write.read_set_of_pills()
+    #
+    # def set_pill_rotation(self):
+    #     self.rotation = self.csv_read_write.read_set_of_pills()
 
 
 if __name__ == '__main__':
-    pill_controler = PillController("COM5")
+    pass
+    #pill_controler = PillController("COM5")
 
-    while True:
-        for day in days:
-            current_time.d = day
-            for hour in range(24):
-                current_time.h = hour
-                if current_time.h < 10:
-                    hour_string = f"0{current_time.h}"
-                else:
-                    hour_string = f"{current_time.h}"
 
-                for minute in range(60):
-                    current_time.m = minute
-
-                    if current_time.m < 10:
-                        minute_string = f"0{current_time.m}"
-                    else:
-                        minute_string = f"{current_time.m}"
-
-                    current_time_string = f"{current_time.d} " + hour_string + minute_string
-
-                    if current_time_string in pill_controler.rotation.keys():
-                        print(pill_controler.rotation[current_time_string])
-                        pill_controler.drop_pills(pill_controler.rotation[current_time_string])
-
-                    sleep(time_speed)
+    # while True:
+    #     for day in days:
+    #         current_time.d = day
+    #         for hour in range(24):
+    #             current_time.h = hour
+    #             if current_time.h < 10:
+    #                 hour_string = f"0{current_time.h}"
+    #             else:
+    #                 hour_string = f"{current_time.h}"
+    #
+    #             for minute in range(60):
+    #                 current_time.m = minute
+    #
+    #                 if current_time.m < 10:
+    #                     minute_string = f"0{current_time.m}"
+    #                 else:
+    #                     minute_string = f"{current_time.m}"
+    #
+    #                 current_time_string = f"{current_time.d} " + hour_string + minute_string
+    #
+    #                 if current_time_string in pill_controler.rotation.keys():
+    #                     print(pill_controler.rotation[current_time_string])
+    #                     pill_controler.drop_pills(pill_controler.rotation[current_time_string])
+    #
+    #                 sleep(time_speed)

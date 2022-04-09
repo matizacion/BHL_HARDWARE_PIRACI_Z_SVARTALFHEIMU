@@ -17,7 +17,19 @@ time_speed = 0.001  # ile czasu w sekundach trwa minuta
 
 
 class PillBox:
-    def __init__(self, controller, servo_no, start_capacity=0, wait_time=1):
+    """
+    Class representing one pill box with one pill server.
+    """
+    def __init__(self, controller, servo_no, start_capacity=0, wait_time=1, zero_pos=3000, delivery_position=1000):
+        """
+        Initialise one Pill Box
+        :param controller: instance of a Controller class from maestro.py file.
+        :param servo_no: number representing this pillbox (position at which servo is plugged into Polulu Maestro)
+        :param start_capacity: amount of pills at start time (default 0)
+        :param wait_time: time taken to deliver one pill to common container (default 1)
+        :param zero_pos: position at which servo starts (int or float in us) (also position at which servo delivers pill to common container)
+        :param delivery_position: position at which servo takes pill from container (int or float in us)
+        """
         self.controller = controller
         self.servo_no = servo_no
 
@@ -28,9 +40,17 @@ class PillBox:
         self.zero()
 
     def zero(self):
+        """
+        Zero servo on closed position (not accepting pills)
+        :return: None
+        """
         self.controller.setTarget(self.servo_no, 3000 * 4)
 
     def drop_pill(self):
+        """
+        Move servo to open position (accept pill) and deliver it to common container
+        :return: None
+        """
         if self.capacity <= 0:
             raise "ERROR! BRAK NARKOTYKOW"
 
@@ -45,6 +65,11 @@ class PillBox:
             print("ERROR! BRAK NARKOTYKOW")
 
     def drop_more_pills(self, amount_of_pills):
+        """
+        Repeat drop_pill action amount of times specified by amount_of_pills param
+        :param amount_of_pills: specified amount of pills to be delivered (int)
+        :return: None
+        """
         for i in range(amount_of_pills):
             self.drop_pill()
 
@@ -54,7 +79,14 @@ class PillBox:
 ######################################
 
 class PillController:
+    """
+    Class that represent whole system of containers.
+    """
     def __init__(self, tty_str):
+        """
+        Initalise pill controller
+        :param tty_str: ACM string (for linux) or COM string (for Windows) for Polulu Maestro Controller
+        """
         self.servo_controller = maestro.Controller(ttyStr=tty_str)
 
         self.pills_containers_num = 6
@@ -70,6 +102,11 @@ class PillController:
         self.set_capacities()
 
     def drop_pills(self, drop_list_or_dict):
+        """
+        Drop set of pills from different containers specified by drop_list_or_dict
+        :param drop_list_or_dict: index represents container (Pill Box) and ints value amount of pills from this container.
+        :return:
+        """
         for i in range(self.pills_containers_num):
             self.pill_boxes[i].drop_more_pills(drop_list_or_dict[i])
 

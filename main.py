@@ -28,10 +28,11 @@ class MainRobot:
 
         self.current_time = Time()
         self.days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-        self.time_speed = 0.001  # ile czasu w sekundach trwa minuta
+        self.time_speed = 0.01  # ile czasu w sekundach trwa minuta
 
     def main_loop(self):
         while True:
+            print("starto of the loop")
             for day in self.days:
                 self.current_time.d = day
                 for hour in range(24):
@@ -43,8 +44,6 @@ class MainRobot:
 
                     for minute in range(60):
                         self.current_time.m = minute
-                        print('Jadymy')
-                        self.motor.go()
 
                         if self.current_time.m < 10:
                             minute_string = f"0{self.current_time.m}"
@@ -52,17 +51,24 @@ class MainRobot:
                             minute_string = f"{self.current_time.m}"
 
                         current_time_string = f"{self.current_time.d} " + hour_string + minute_string
+                        #print(current_time_string)
+                        #print(self.pc.rotation.keys())
 
                         if current_time_string in self.pc.rotation.keys():
+                            print("TEST")
                             print(self.pc.rotation[current_time_string])
 
                             self.pc.drop_pills(self.pc.rotation[current_time_string])
+                            print('Jadymy')
+                            self.motor.go()
 
                         sleep(self.time_speed)
 
 
 if __name__ == '__main__':
     mr = MainRobot()
+    print(mr.pc.csv_read_write.sets)
+    print(mr.pc.csv_read_write.pills)
     mr.main_loop()
 
     # pc = PillController(tty_str='COM5')

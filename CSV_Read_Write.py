@@ -12,27 +12,49 @@ class CSVReadWrite:
         self.sets = [(line.rstrip().split(',')) for line in self.sets_file]
 
         self.sets = {elem[0]: elem[1:] for elem in self.sets}
+        for k in self.sets.keys():
+            list_str=self.sets[k]
+            for i  in range (len(list_str)):
+                list_str[i]=int(list_str[i])
+            self.sets[k]=list_str
+            
 
         self.sets_file.close()
         self.sets_file = open("pills_sets.csv", "w", newline='')
 
-        self.pills_file = open("pills_storage.csv", "r")
-        self.pills = self.pills_file.read()
-        self.pills_file.close()
-
-        self.pills_file = open("pills_storage.csv", "w", newline='')
+        self.pills_file = open("pills_storage.csv", "r",newline='')
+        
+        self.pills = self.pills_file.readline()
         self.pills = self.pills.split(",")
+        
+            
+        
+        for i in range(len(self.pills)):
+            if self.pills[i]!="":
+                self.pills[i]=int(self.pills[i])
+        self.pills_file.close()
+        self.pills_file = open("pills_storage.csv", "w", newline='')
+       # self.pills = self.pills.split(",")
 
     def __del__(self):
         """
         Destruktor klasy CSVReadWrite zapisujący dane do pliku csv
         :return: None
         """
+        for k in self.sets.keys():
+            list_str=self.sets[k]
+            for i  in range (len(list_str)):
+                list_str[i]=str(list_str[i])
+            self.sets[k]=list_str
+            
         for key in self.sets.keys():
             self.sets_file.write(key + "," + ",".join(self.sets[key]))
             self.sets_file.write('\n')
-
+            
+        for i in range(len(self.pills)):
+            self.pills[i]=str(self.pills[i])
         self.pills_file.write(",".join(self.pills))
+        
         self.pills_file.close()
         self.sets_file.close()
 

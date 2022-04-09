@@ -82,14 +82,15 @@ class PillController:
         self.pills_containers_num = 6
         self.pill_boxes = []
         self.csv_read_write = CSVReadWrite()
+       # print(self.csv_read_write.sets)
 
-        self.rotation = {}
+        self.rotation = self.csv_read_write.sets
         # self.set_pill_rotation()
 
         for i in range(self.pills_containers_num):
             self.pill_boxes.append(PillBox(self.servo_controller, i))
 
-        # self.set_capacities()
+        self.set_capacities()
 
     def drop_pills(self, drop_list_or_dict):
         """
@@ -98,6 +99,7 @@ class PillController:
         :return:
         """
         for i in range(self.pills_containers_num):
+            print(drop_list_or_dict[i],type(drop_list_or_dict[i]),drop_list_or_dict)
             self.pill_boxes[i].drop_more_pills(drop_list_or_dict[i])
             self.csv_read_write.pills[i] -= drop_list_or_dict[i]
 

@@ -74,7 +74,15 @@ class Motor:
         self.pwm_1.ChangeDutyCycle(self.pwm_)
         self.pwm_2.ChangeDutyCycle(self.pwm_)
 
-        time.sleep(self.time_1_)
+#        time.sleep(self.time_1_)
+        
+        GPIO.output(self.BIN_1_, GPIO.LOW)
+        GPIO.output(self.BIN_2_, GPIO.HIGH)
+        
+        ti
+            me.sleep(2)
+        
+        
         self.pwm_1.ChangeDutyCycle(0)
         self.pwm_2.ChangeDutyCycle(0)
 
@@ -86,5 +94,5 @@ class Motor:
 
 
 if __name__ == '__main__':
-    motor = Motor(motor_pin_1, motor_pin_2, AIN_1, AIN_2, BIN_1, BIN_2, LED)
+    motor = Motor()
     motor.go()

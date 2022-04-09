@@ -73,16 +73,36 @@ class Motor:
         """
         self.pwm_1.ChangeDutyCycle(self.pwm_)
         self.pwm_2.ChangeDutyCycle(self.pwm_)
-
-#        time.sleep(self.time_1_)
+        
+        time.sleep(self.time_1_)
         
         GPIO.output(self.BIN_1_, GPIO.LOW)
         GPIO.output(self.BIN_2_, GPIO.HIGH)
         
-        ti
-            me.sleep(2)
+        time.sleep(2)
         
+        GPIO.output(self.BIN_1_, GPIO.HIGH)
+        GPIO.output(self.BIN_2_, GPIO.LOW)
         
+        time.sleep(3)
+
+        GPIO.output(self.BIN_1_, GPIO.LOW)
+        GPIO.output(self.BIN_2_, GPIO.HIGH)
+        
+        GPIO.output(self.AIN_1_, GPIO.LOW)
+        GPIO.output(self.AIN_2_, GPIO.HIGH)
+        
+        time.sleep(3)
+
+        GPIO.output(self.AIN_1_, GPIO.HIGH)
+        GPIO.output(self.AIN_2_, GPIO.LOW)
+        
+        time.sleep(2)
+        GPIO.output(self.BIN_1_, GPIO.HIGH)
+        GPIO.output(self.BIN_2_, GPIO.LOW)
+        
+        time.sleep(self.time_1_)
+
         self.pwm_1.ChangeDutyCycle(0)
         self.pwm_2.ChangeDutyCycle(0)
 

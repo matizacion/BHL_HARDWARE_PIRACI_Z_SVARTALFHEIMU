@@ -4,7 +4,7 @@ import time
 
 class Motor:
 
-    def __init__(self, motor_pin_1, motor_pin_2, AIN_1, AIN_2, BIN_1, BIN_2, LED, time_1=5, time_2=1, pwm=80):
+    def __init__(self, motor_pin_1=32, motor_pin_2=33, AIN_1=38, AIN_2=40, BIN_1=35, BIN_2=37, LED=11, time_1=5, time_2=1, pwm=80):
         """
         konstruktor klasy motor przyjmujący podstawowe wartości potrzebne do sterowania silnikami
         :param motor_pin_1: int -> numer pinu sterującego pwm1
@@ -29,6 +29,10 @@ class Motor:
         self.time_2_ = time_2
         self.pwm_ = pwm
         self.setup()
+        
+    def __del__(self):
+        
+        GPIO.cleanup()
 
     def setup(self):
         """
@@ -71,8 +75,8 @@ class Motor:
         self.pwm_2.ChangeDutyCycle(self.pwm_)
 
         time.sleep(self.time_1_)
-        self.pwm_1.stop()
-        self.pwm_2.stop()
+        self.pwm_1.ChangeDutyCycle(0)
+        self.pwm_2.ChangeDutyCycle(0)
 
         GPIO.output(self.LED_, GPIO.HIGH)
 
@@ -80,16 +84,7 @@ class Motor:
 
         GPIO.output(self.LED_, GPIO.LOW)
 
-        GPIO.cleanup()
-
 
 if __name__ == '__main__':
-    motor_pin_1 = 32
-    AIN_1 = 38
-    AIN_2 = 40
-    motor_pin_2 = 33
-    BIN_1 = 35
-    BIN_2 = 37
-    LED = 11
     motor = Motor(motor_pin_1, motor_pin_2, AIN_1, AIN_2, BIN_1, BIN_2, LED)
     motor.go()

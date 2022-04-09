@@ -5,7 +5,7 @@ from numpy import ceil
 PY2 = version_info[0] == 2  # Running Python 2.x?
 
 
-# To jest biblioteka zajebana stąd:
+# To jest biblioteka pobrana stąd:
 # https://github.com/FRC4564/Maestro/blob/master/maestro.py
 #
 # ---------------------------

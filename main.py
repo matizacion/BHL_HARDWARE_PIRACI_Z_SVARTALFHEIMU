@@ -14,7 +14,7 @@ class Time:
 
 class MainRobot:
     def __init__(self):
-        self.pc = PillController(tty_str='COM5')
+        self.pc = PillController(tty_str='/dev/ttyACM0')
 
         motor_pin_1 = 32
         AIN_1 = 38
@@ -43,7 +43,7 @@ class MainRobot:
 
                     for minute in range(60):
                         self.current_time.m = minute
-
+                        print('Jadymy')
                         self.motor.go()
 
                         if self.current_time.m < 10:
@@ -56,7 +56,7 @@ class MainRobot:
                         if current_time_string in self.pc.rotation.keys():
                             print(self.pc.rotation[current_time_string])
 
-                        self.pc.drop_pills(self.pc.rotation[current_time_string])
+                            self.pc.drop_pills(self.pc.rotation[current_time_string])
 
                         sleep(self.time_speed)
 

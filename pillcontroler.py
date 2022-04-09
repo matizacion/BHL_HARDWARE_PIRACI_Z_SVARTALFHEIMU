@@ -24,6 +24,9 @@ class PillBox:
 
         self.wait_time = wait_time
 
+        self.delivery_position = delivery_position
+        self.zero_pos = zero_pos
+
         self.capacity = start_capacity
 
         self.zero()
@@ -33,7 +36,7 @@ class PillBox:
         Zero servo on closed position (not accepting pills)
         :return: None
         """
-        self.controller.setTarget(self.servo_no, 3000 * 4)
+        self.controller.setTarget(self.servo_no, self.zero_pos * 4)
 
     def drop_pill(self):
         """
@@ -43,9 +46,9 @@ class PillBox:
         if self.capacity <= 0:
             raise "ERROR! BRAK NARKOTYKOW"
 
-        self.controller.setTarget(self.servo_no, 1000 * 4)
+        self.controller.setTarget(self.servo_no, self.delivery_position * 4)
         sleep(self.wait_time)
-        self.controller.setTarget(self.servo_no, 3000 * 4)
+        self.controller.setTarget(self.servo_no, self.zero_pos * 4)
         sleep(self.wait_time)
 
         self.capacity -= 1
@@ -82,13 +85,17 @@ class PillController:
         self.pills_containers_num = 6
         self.pill_boxes = []
         self.csv_read_write = CSVReadWrite()
-       # print(self.csv_read_write.sets)
+        # print(self.csv_read_write.sets)
 
         self.rotation = self.csv_read_write.sets
         # self.set_pill_rotation()
 
-        for i in range(self.pills_containers_num):
-            self.pill_boxes.append(PillBox(self.servo_controller, i))
+        self.pill_boxes.append(PillBox(self.servo_controller, 0, zero_pos=512, delivery_position=1610))
+        self.pill_boxes.append(PillBox(self.servo_controller, 1, zero_pos=1092, delivery_position=2244))
+        self.pill_boxes.append(PillBox(self.servo_controller, 2, zero_pos= 1050, delivery_position=2688))
+        self.pill_boxes.append(PillBox(self.servo_controller, 3, zero_pos=512, delivery_position=1769))
+        self.pill_boxes.append(PillBox(self.servo_controller, 4, zero_pos=512, delivery_position=1663))
+        self.pill_boxes.append(PillBox(self.servo_controller, 5))
 
         self.set_capacities()
 
@@ -99,7 +106,7 @@ class PillController:
         :return:
         """
         for i in range(self.pills_containers_num):
-            print(drop_list_or_dict[i],type(drop_list_or_dict[i]),drop_list_or_dict)
+            print(drop_list_or_dict[i], type(drop_list_or_dict[i]), drop_list_or_dict)
             self.pill_boxes[i].drop_more_pills(drop_list_or_dict[i])
             self.csv_read_write.pills[i] -= drop_list_or_dict[i]
 
@@ -113,9 +120,15 @@ class PillController:
 
 
 if __name__ == '__main__':
-    pass
-    #pill_controler = PillController("COM5")
+    pc = PillController("COM5")
+    sleep(1)
 
+    # pc.pill_boxes[0].drop_pill()
+
+    for i in pc.pill_boxes:
+        i.drop_pill()
+
+    # pill_controler = PillController("COM5")
 
     # while True:
     #     for day in days:

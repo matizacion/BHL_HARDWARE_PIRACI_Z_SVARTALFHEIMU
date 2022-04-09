@@ -6,6 +6,8 @@ from motor import Motor
 
 from send_data import comunication_module
 
+import requests
+
 
 @dataclass
 class Time:
@@ -25,6 +27,8 @@ class MainRobot:
         BIN_1 = 35
         BIN_2 = 37
         LED = 11
+
+        self.url = 'http://192.168.137.182/LED'
 
         self.c = comunication_module()
         self.c.start_deamon()
@@ -58,8 +62,8 @@ class MainRobot:
                             minute_string = f"{self.current_time.m}"
 
                         current_time_string = f"{self.current_time.d} " + hour_string + minute_string
-                        #print(current_time_string)
-                        #print(self.pc.rotation.keys())
+                        # print(current_time_string)
+                        # print(self.pc.rotation.keys())
 
                         new_recv_data = self.c.recv_data
                         if self.old_recv_data != new_recv_data:
@@ -70,9 +74,13 @@ class MainRobot:
                             print("TEST")
                             print(self.pc.rotation[current_time_string])
 
+                            x= requests.post(self.url, data={})
+
                             self.pc.drop_pills(self.pc.rotation[current_time_string])
                             print('Jadymy')
                             self.motor.go()
+
+                            x = requests.post(self.url, data={})
 
                         sleep(self.time_speed)
 
